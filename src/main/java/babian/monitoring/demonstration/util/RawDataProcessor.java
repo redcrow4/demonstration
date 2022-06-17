@@ -1,4 +1,4 @@
-package babian.monitoring.demonstration.app.util;
+package babian.monitoring.demonstration.util;
 
 import babian.monitoring.demonstration.app.constants.CommonConstants;
 import babian.monitoring.demonstration.app.constants.RawDataProcessorConstants;
@@ -16,7 +16,7 @@ import java.util.LinkedList;
 @Component
 public class RawDataProcessor {
 
-    private final Logger logger = LoggerFactory.getLogger("IOT_LOG_PROFILE");
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final HashMap<Integer, Integer> patternMap = new HashMap<>();
 
     RawDataProcessor() {
@@ -119,7 +119,7 @@ public class RawDataProcessor {
 
         monitoringStatusDTO.postureStatus = currentPostureStatus;
 
-        if (currentPostureStatus == CommonConstants.POSTURE_STATUS_GOOD) {
+//        if (currentPostureStatus == CommonConstants.POSTURE_STATUS_GOOD) {
             int[] sampleDataArray = new int[24];
 
             for (int i = 0; i < 8; i++) {
@@ -127,11 +127,16 @@ public class RawDataProcessor {
                 sampleDataArray[i + 8] = dataArray1[i + 3];
                 sampleDataArray[i + 16] = dataArray2[i + 3];
             }
-            monitoringStatusDTO = setPositionValue(monitoringStatusDTO, timeStep, 2, sampleDataArray);
-        } else {
-            setPositionValue(monitoringStatusDTO);
-        }
+            monitoringStatusDTO = setPositionValue(monitoringStatusDTO, timeStep, CommonConstants.POSTURE_STATUS_GOOD, sampleDataArray);
+//        } else {
+//            setPositionValue(monitoringStatusDTO);
+//        }
+        printResult(monitoringStatusDTO);
         return monitoringStatusDTO;
+    }
+
+    private void printResult(MonitoringStatusDTO monitoringStatusDTO) {
+        logger.info("printResult={}", monitoringStatusDTO.toStringSimple());
     }
 
     public void setPositionValue(MonitoringStatusDTO matNode) {
@@ -151,7 +156,7 @@ public class RawDataProcessor {
 
         if (monitoringStatusDTO.prevTimeStep != timeStep) {
             monitoringStatusDTO.prevTimeStep = timeStep;
-            if (monitoringStatusDTO.postureValue == position) {
+//            if (monitoringStatusDTO.postureValue == CommonConstants.POSTURE_STATUS_GOOD) {
                 for (int datum : data) { // 'data.length' should be 8*3
                     monitoringStatusDTO.pressureData.add((double) datum);
                 }
@@ -223,7 +228,7 @@ public class RawDataProcessor {
 
                     double estimated_freq = peakIndex * sample_freq / pressureData.length;
                     double freqPerMin = estimated_freq * 60;
-                    logger.info("호흡 수: " + freqPerMin);
+//                    logger.info("호흡 수: " + freqPerMin);
 
                     int breathStatus;
 
@@ -250,12 +255,12 @@ public class RawDataProcessor {
                     }
                     monitoringStatusDTO.breathStatus = breathStatus;
                 }
-            } else {
-                monitoringStatusDTO.postureValue = position;
-                monitoringStatusDTO.postureSumValue = 0;
-                monitoringStatusDTO.pressureData.clear();
-                monitoringStatusDTO.breathStatus = CommonConstants.BREATH_STATUS_NOT_READY;
-            }
+//            } else {
+//                monitoringStatusDTO.postureValue = position;
+//                monitoringStatusDTO.postureSumValue = 0;
+//                monitoringStatusDTO.pressureData.clear();
+//                monitoringStatusDTO.breathStatus = CommonConstants.BREATH_STATUS_NOT_READY;
+//            }
             monitoringStatusDTO.postureValue = position;
         } else {
             monitoringStatusDTO.breathStatus = CommonConstants.BREATH_STATUS_UNKNOWN;

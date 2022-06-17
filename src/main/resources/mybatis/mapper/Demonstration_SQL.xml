@@ -1,98 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.midashnt.babysmarthome.app.mapper.BabyMapper">
+<mapper namespace="babian.monitoring.demonstration.app.DemonstrationMapper">
 
-    <insert id="createBaby" parameterType="Baby" useGeneratedKeys="true" keyProperty="babyIndex">
-        INSERT INTO TB_BABY( LIGHT_INDEX
-                           , BABY_NICK_NAME
-                           , BABY_BIRTHDAY
-                           , BABY_GENDER_CODE
-                           , BABY_IMAGE_PATH
-                           , BABY_DELETE_STATE)
-            VALUE (#{lightIndex}, #{babyNickName}, #{babyBirthday}, #{babyGenderCode}, #{babyImagePath}, #{babyDeleteState})
-    </insert>
+    <select id="getClassList" parameterType="int" resultType="classDTO">
+        SELECT /*getClass*/
+               CLASS_INDEX
+             , CLASS_NAME
+          FROM tb_class
+         WHERE ACCOUNT = #{account}
+    </select>
 
-    <update id="updateBaby" parameterType="Baby">
-        UPDATE TB_BABY
-        SET BABY_INDEX = #{babyIndex}
-        <if test="babyNickName != null and !babyNickName.equals('')">
-            , BABY_NICK_NAME = #{babyNickName}
-        </if>
-        <if test="babyBirthday != null and !babyBirthday.equals('')">
-            , BABY_BIRTHDAY = #{babyBirthday}
-        </if>
-        <if test="babyGenderCode == 1 or babyGenderCode == 2">
-            , BABY_GENDER_CODE = #{babyGenderCode}
-        </if>
+    <select id="getBabyList" parameterType= "int" resultType="babyDTO">
+        SELECT /*getBaby*/
+               BABY_INDEX
+             , CLASS_INDEX
+             , BABY_NAME
+          FROM tb_baby
+         WHERE CLASS_INDEX = #{classIndex}
+    </select>
+
+    <select id="getMonitoringTarget" parameterType="int" resultType="monitoringStatusDTO">
+        SELECT /*getMonitoringTarget*/
+               TC.CLASS_INDEX
+             , TC.CLASS_NAME
+             , TB.BABY_INDEX
+             , TB.BABY_NAME
+         FROM tb_baby TB
+   INNER JOIN tb_class TC
+           ON TB.CLASS_INDEX = TC.CLASS_INDEX
         WHERE BABY_INDEX = #{babyIndex}
-    </update>
-
-    <select id="getClassAndBaby" resultType="classDTO">
-        SELECT /*getClassAndBaby*/
-               BABY_INDEX           babyIndex
-             , LIGHT_INDEX          lightIndex
-             , BABY_NICK_NAME       babyNickName
-             , BABY_BIRTHDAY        babyBirthday
-             , BABY_GENDER_CODE     babyGenderCode
-             , BABY_IMAGE_PATH      babyImagePath
-             , BABY_DELETE_STATE    babyDeleteState
-         FROM TB_BABY
-        WHERE BABY_INDEX = #{babyIndex}
-          AND BABY_DELETE_STATE = 1
     </select>
-
-    <select id="getBabyListByLightIndex" parameterType="int" resultType="Baby">
-        SELECT /*getBabyListByLightIndex*/
-               BABY_INDEX           babyIndex
-             , LIGHT_INDEX          lightIndex
-             , BABY_NICK_NAME       babyNickName
-             , BABY_BIRTHDAY        babyBirthday
-             , BABY_GENDER_CODE     babyGenderCode
-             , BABY_IMAGE_PATH      babyImagePath
-             , BABY_DELETE_STATE    babyDeleteState
-         FROM TB_BABY
-        WHERE LIGHT_INDEX = #{lightIndex}
-          AND BABY_DELETE_STATE = 1
-    </select>
-
-    <select id="getAllBabyListByLightIndex" parameterType="int" resultType="Baby">
-        SELECT /*getAllBabyListByLightIndex*/
-               BABY_INDEX       babyIndex
-             , LIGHT_INDEX      lightIndex
-             , BABY_NICK_NAME   babyNickName
-             , BABY_BIRTHDAY    babyBirthday
-             , BABY_GENDER_CODE babyGenderCode
-             , BABY_IMAGE_PATH  babyImagePath
-         FROM TB_BABY
-        WHERE LIGHT_INDEX = #{lightIndex}
-    </select>
-
-    <update id="deleteBaby" parameterType="Baby">
-        UPDATE /*deleteBaby*/
-               TB_BABY
-           SET BABY_DELETE_STATE = #{babyDeleteState}
-         WHERE BABY_INDEX = #{babyIndex}
-    </update>
-
-    <update id="changeBabyLightIndex" parameterType="Map">
-        UPDATE /*changeBabyLightIndex*/
-               TB_BABY
-           SET LIGHT_INDEX = #{newLightIndex}
-         WHERE LIGHT_INDEX = #{oldLightIndex}
-    </update>
-
-    <update id="updateBabyImagePath" parameterType="Baby">
-        UPDATE /*updateBabyImagePath*/
-               TB_BABY
-           SET BABY_IMAGE_PATH = #{babyImagePath}
-         WHERE BABY_INDEX = #{babyIndex}
-    </update>
-
-    <delete id="deleteBabyByLightIndex" parameterType="int">
-        DELETE
-          FROM TB_BABY
-         WHERE LIGHT_INDEX = #{lightIndex}
-    </delete>
 
 </mapper>

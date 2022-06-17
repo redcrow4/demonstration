@@ -1,1 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://midas-dev.cc5qnr5qomwj.ap-northeast-2.rds.amazonaws.com:3306/demonstration_tmp
+    username: midas_dev
+    password: midas_dev
 
+logging:
+  level:
+    root: info
+    jdbc:
+      sqlonly: off
+      audit: off
+      resultset: off
+      resultsettable: off
+      connection: off
+  charset:
+    console: UTF-8
+
+server:
+  port: 80
+
+mybatis:
+  mapper-locations: mybatis/mapper/*.xml
+  config-location: classpath:mybatis/mybatis-config.xml
