@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <typeAlias alias="Baby"         type="com.midashnt.babysmarthome.app.dto.Baby" />
+        <typeAlias alias="DeviceToken"  type="com.midashnt.babysmarthome.app.dto.DeviceToken" />
+        <typeAlias alias="History"      type="com.midashnt.babysmarthome.app.dto.History" />
+        <typeAlias alias="Light"        type="com.midashnt.babysmarthome.app.dto.Light" />
+        <typeAlias alias="Mat"          type="com.midashnt.babysmarthome.app.dto.Mat" />
+
+        <typeAlias alias="RawData"      type="com.midashnt.babysmarthome.cloud.aws.test.RawData" />
+        <typeAlias alias="Air"          type="com.midashnt.babysmarthome.cloud.aws.test.Air" />
+        <typeAlias alias="ShadowMat"    type="com.midashnt.babysmarthome.cloud.dto.Shadow$Mat" />
+
+    </typeAliases>
+
+</configuration>
